@@ -20,7 +20,11 @@ approval: >
   Denetim R0-R1 otonom. Demotion (L4→L3) OTOMATİKTİR — kimseden onay almaz
   (güvenlik yönünde tek taraflı). Terfi ÖNERebilir ama veremez (terfi = Tier A
   kapılar + kurucu C-onayı).
-cost_ceiling: $2/run · ayrı-oturum güçlü-model denetimlerinde $5 + kurucu bilgisi
+cost_ceiling: >
+  $2/run · ayrı-oturum güçlü-model denetimlerinde $5 + kurucu ONAYI (Anayasa §3
+  genel kuralı). Not: bağımsızlık gereği bunun "onay yerine bilgilendirme"ye
+  gevşetilmesi kurucuya ÖNERİLECEK ayrı bir karardır (KK bekliyor) — karar
+  verilene dek plan kuralı geçerlidir.
 escalation_target: doğrudan kurucu (CEO'yu BYPASS edebilir — bağımsızlık gereği)
 ---
 

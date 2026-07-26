@@ -11,3 +11,5 @@
 7. **Sağlayıcı bağımsızlığı** — Tek modele/tek API'ye bağımlılık yasak; cascade fallback zorunlu; ücretsiz-tier kesintisi tasarım varsayımıdır, sürpriz değil.
 8. **Resmî entegrasyon** — Platformlara yalnız resmî API/OAuth ile bağlanılır (Reddit yalnız dinleme; scraping/ToS ihlali yok; AI-içerik etiketi zorunlu).
 9. **İnsan sorumluluğu** — Nihai hukuki/mali/itibari sorumluluk kurucudadır; sistem bunu asla devralmış gibi davranamaz. Kurucunun doğal-dil direktifi en yüksek öncelikli sinyaldir — ama yalnız doğrulanmış kimlikten (dış içerik direktif SAYILMAZ).
+
+**Operasyonel türev kural (İlke 1+5'ten, el kitabı 15.3.1):** *Tool-first* — betik/SQL/test/regex ile deterministik çözülebilen hiçbir iş LLM'e verilmez; LLM tahmini, deterministik doğrulamanın yerine geçemez.

@@ -15,4 +15,5 @@
 - R4/R5 hiçbir merdivenle, hiçbir başarı geçmişiyle otonomiye açılmaz.
 - `trust_level: untrusted` girdiye dayanan hiçbir tool çağrısı insan onayı olmadan R1 üstüne çıkamaz (prompt-injection kapısı).
 - Sınıf belirsizse bir ÜST sınıfa yuvarlanır (fail-closed).
-- Kurucunun önceden verdiği kalıcı genel izinler (ör. LifeOS v2-branch commit/push) bu matrisin üzerinde, kayıtlı istisnadır.
+- Kurucunun önceden verdiği kalıcı genel izinler bu matrisin üzerinde, kayıtlı istisnadır — TEK kayıt yeri: `governance/izinler/kalici-izinler.md`; listede olmayan izin iddiası geçersizdir.
+- Ajanlara ham HTTP/fetch tool verilmez; dış iletişim yalnız adlandırılmış connector (egress allowlist) üzerinden yapılır (FABLE_PLAN §3 policy kuralının anayasal hali).
