@@ -1,0 +1,80 @@
+# YULA Holding — Workflow Tanımları v1 (Braavolabs'a yüklenmeye hazır)
+# Şekil = holding_workflow_definitions satırı (key/name/riskClass/autonomyLevel/steps).
+# steps[].kind kapalı kümedendir; "planned_kind" işaretli olanlar D4 diliminde
+# (pipeline/patrol/classify türleri) açılana dek enabled:false yüklenir.
+# Yükleme: D4'te seed betiği bu dosyayı okur → DB'ye upsert eder (key bazlı).
+
+- key: kapi-duman-testi
+  name: "Kapı duman testi (deterministik kabul akışı)"
+  description: "P3 kabulünün canlı hali: hazırlık → kurucu onay kapısı → kapanış. Her ortam değişikliğinde motorun onay-park/resume zincirini kanıtlar."
+  riskClass: R1
+  autonomyLevel: 2
+  enabled: true
+  steps:
+    - { name: "hazırlık",       kind: noop,     reasoning: "ortam ayakta mı — yan etkisiz kontrol noktası" }
+    - { name: "kurucu kapısı",  kind: approval, reasoning: "onay-park/resume zincirinin uçtan uca kanıtı", params: { description: "Duman testi: motoru bu ortamda çalışır kabul ediyor musun?" } }
+    - { name: "kapanış kaydı",  kind: log,      reasoning: "audit'te iz bırak", params: { message: "duman testi tamam" } }
+
+- key: sentinel-s1-devriye
+  name: "Nöbetçi S1 devriyesi"
+  description: "3 saatte bir: yeni sentinel_events var mı → sınıf-1 zinciriyle (lokal Qwen3-4B) SEV/kategori etiketle → brief kuyruğuna özet; eşik üstü S2'ye. SİNYAL YOKSA LLM ÇAĞRILMAZ."
+  riskClass: R1
+  autonomyLevel: 4          # R1 = ilk günden otonom (Anayasa §2)
+  enabled: false            # planned_kind: patrol (D4)
+  steps:
+    - { name: "kuyruk ön-kontrol", kind: noop,   reasoning: "betik: yeni event yoksa ÇIK — $0 kuralı" }
+    - { name: "devriye",           kind: patrol, reasoning: "yalnız-okuma sınıflandırma; S0 sinyali bastıramaz, severity DÜŞÜREMEZ", planned_kind: true }
+    - { name: "brief özeti",       kind: log,    reasoning: "devriye çıktısı brief kuyruğuna" }
+
+- key: store-mail-triyaj
+  name: "Store mail triyajı"
+  description: "S0 mail sinyali (Apple/Play) → venture ataması + aksiyon önerisi; RET = hard sinyal, devriye beklemez, doğrudan kurucu bildirimi."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false            # planned_kind: classify (D4)
+  steps:
+    - { name: "sınıflandır",  kind: classify, reasoning: "tablo-güdümlü S0 çıktısını sınıf-1 zinciriyle zenginleştir (S0'ı EZEMEZ)", planned_kind: true }
+    - { name: "bulgu yaz",    kind: log,      reasoning: "venture DEFTER önerisi + sentinel status güncelle" }
+    - { name: "ret bildirimi", kind: approval, reasoning: "ret vakasında kurucuya anında tek-tık eskalasyon", params: { description: "Store ret sinyali — müdahale planını onayla" } }
+
+- key: gunluk-brief
+  name: "Günlük kurucu brief'i (≤5 madde)"
+  description: "Masaların satırları + COO akış durumu + CFO maliyet satırı → tek Telegram mesajı. Rapor enflasyonu yasak."
+  riskClass: R2             # dış mesaj (tek alıcı: kurucu) — şablonlu R2
+  autonomyLevel: 2          # şablon kurucu onayı alana dek her gönderim onaylı
+  enabled: false            # planned_kind: pipeline (D4 — ürün pipeline'ı derler)
+  steps:
+    - { name: "topla",   kind: pipeline, reasoning: "YULA tenant'ında brief-derleme pipeline'ı (yüzeylerde görünür — dogfood)", planned_kind: true, params: { pipelineKey: "yula-daily-brief" } }
+    - { name: "gönder",  kind: approval, reasoning: "şablon L4 onayına kadar insan-kapılı", params: { description: "Günlük brief hazır — gönderilsin mi?" } }
+
+- key: haftalik-scorecard
+  name: "Haftalık scorecard (≤8 KPI)"
+  description: "cosφ + en-kötü-hop + maliyet/venture + defter yaşlanması + kanal sağlığı."
+  riskClass: R2
+  autonomyLevel: 2
+  enabled: false            # planned_kind: pipeline (D4)
+  steps:
+    - { name: "derle",  kind: pipeline, reasoning: "KPI derlemesi ürün makinesinde", planned_kind: true, params: { pipelineKey: "yula-weekly-scorecard" } }
+    - { name: "gönder", kind: approval, reasoning: "insan-kapılı", params: { description: "Haftalık scorecard hazır" } }
+
+- key: gp1-hikaye-yayini
+  name: "GP1: hikâye → içerik → yayın"
+  description: "story_candidate → sınıf-7 taslak → K0 kapıları (charter+disclosure+AI-etiket+factuality) → kurucu onayı → yayın → 24-72h metrik → learning card. İlk tetik: Braavolabs'ın bir sonraki gerçek release'i."
+  riskClass: R3             # geniş kamu yayını — 20-run merdiveni
+  autonomyLevel: 2
+  enabled: false            # planned_kind: pipeline (D4)
+  steps:
+    - { name: "taslak",       kind: pipeline, reasoning: "YULA tenant içerik pipeline'ı (Qwen3-8B → free-API zinciri)", planned_kind: true, params: { pipelineKey: "yula-content-draft" } }
+    - { name: "muhafız kapısı", kind: noop,   reasoning: "K0 betik kapıları: disclosure + AI-etiket + factuality diff (deterministik)" }
+    - { name: "kurucu onayı", kind: approval, reasoning: "R3 — ilk 20 run insan-onaylı", params: { description: "BIP içeriği yayına hazır — onaylıyor musun?" } }
+    - { name: "yayın+metrik", kind: pipeline, reasoning: "onaylı içerik SM hattına; 24-72h metrik topla", planned_kind: true, params: { pipelineKey: "yula-content-publish" } }
+
+- key: defter-sagligi
+  name: "Defter sağlığı süpürmesi"
+  description: "Haftalık: sahipsiz bulgu · 30 günü aşan P1 · kanıtsız kapanış denemesi · BAYAT durum satırı (H-008) taraması → CoS raporu."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false            # planned_kind: patrol (D4)
+  steps:
+    - { name: "tara",   kind: patrol, reasoning: "5 venture + holding defterlerinde yaşlanma/bayatlık taraması", planned_kind: true }
+    - { name: "raporla", kind: log,   reasoning: "CoS scorecard girdisi + eskalasyon listesi" }
