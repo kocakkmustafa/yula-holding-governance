@@ -3,7 +3,7 @@ id: a8-ostinato
 kat: A
 durum: uykuda
 faz: uyanma-kosulu
-ajanlar: [18-ostinato-masasi]
+ajanlar: [58-ostinato-masasi]
 ---
 # A8 — Ostinato (uykuda)
 

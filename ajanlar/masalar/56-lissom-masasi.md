@@ -1,5 +1,5 @@
 ---
-id: 16-lissom-masasi
+id: 56-lissom-masasi
 sirket: a6-lissom
 faz: uykuda
 model_chain: "sınıf-1 minimum devriye: Qwen3-4B → Gemini 2.5 Flash-Lite (free) → Claude Haiku (eskalasyon); aile aktive olunca sözleşme kurucu kararıyla yeniden yazılır (sözleşme `venture-desk-motion`)"

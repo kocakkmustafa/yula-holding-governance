@@ -3,7 +3,7 @@ id: a6-lissom
 kat: A
 durum: uykuda
 faz: uyanma-kosulu
-ajanlar: [16-lissom-masasi]
+ajanlar: [56-lissom-masasi]
 ---
 # A6 — Lissom (uykuda)
 

@@ -3,7 +3,7 @@ id: a9-choreia
 kat: A
 durum: uykuda
 faz: uyanma-kosulu
-ajanlar: [19-choreia-masasi]
+ajanlar: [59-choreia-masasi]
 ---
 # A9 — Choreia (uykuda)
 

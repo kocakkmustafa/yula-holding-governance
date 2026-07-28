@@ -198,3 +198,116 @@
   steps:
     - { name: "5 hattı sentezle", kind: pipeline, reasoning: "haftanın fikir-radari/ihtiyac-madenciligi/icerik-firsati/rakip-hareketi/seo-firsati sinyallerini kanıt-linkli rapora derle", planned_kind: true, params: { pipelineKey: "yula-opportunity-report" } }
     - { name: "gönder",           kind: approval, reasoning: "şablon L4 onayına kadar insan-kapılı", params: { description: "Haftalık Fırsat Raporu hazır — Köprü Kanalı'na gönderilsin mi?" } }
+
+# ── Denetim-sonrası eklemeler (opus F0 denetimi P1-3/P2-7: F2+ şirket tanımları
+#    dormant-by-design gereği BURADA olmalı — hepsi enabled:false) ────────────
+
+- key: hukuk-mevzuat-radari
+  name: "Hukuk: mevzuat radarı (haftalık)"
+  description: "AI Act/KVKK/GDPR/store-hukuku/TR-mevzuat diff → etki analizi → karar kuyruğu. Runbook: ajanlar/hukuk/49."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false            # planned_kind (F2)
+  steps:
+    - { name: "diff tara",  kind: patrol,   reasoning: "kaynak sayfaların saklanan snapshot'ıyla karşılaştırma", planned_kind: true }
+    - { name: "etki yaz",   kind: log,      reasoning: "etkilenen venture + aksiyon önerisi + deadline" }
+
+- key: hukuk-uyum-taramasi
+  name: "Hukuk: beyan↔gerçek uyum taraması"
+  description: "App Privacy/Data Safety/ToS ↔ kod/davranış mutabakatı; dürüstlük-çizgisi dil kontrolü. Runbook: 50."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false
+  steps:
+    - { name: "tara",    kind: patrol, reasoning: "beyan-kaynak çiftlerinin karşılaştırması", planned_kind: true }
+    - { name: "raporla", kind: log,    reasoning: "uyumsuzluk = bulgu önerisi (avukat-eşiği bayraklı)" }
+
+- key: hukuk-sozlesme-hazirlik
+  name: "Hukuk: doküman hazırlık (talep-tetikli)"
+  description: "ToS/gizlilik/aydınlatma taslağı — 'avukat-onayı-önerilir' etiketli, DAİMA kurucu onaylı. Runbook: 51."
+  riskClass: R1
+  autonomyLevel: 2
+  enabled: false
+  steps:
+    - { name: "taslak",  kind: pipeline, reasoning: "sınıf-7 taslak + kaynak referansları", planned_kind: true }
+    - { name: "onay",    kind: approval, reasoning: "hukuki metin insan-kapısız çıkamaz", params: { description: "Hukuki doküman taslağı hazır — avukat turuna gitsin mi?" } }
+
+- key: hukuk-veri-envanteri-tazeleme
+  name: "Hukuk: KVKK/GDPR veri-işleme envanteri tazeleme"
+  description: "Ürün başına kişisel-veri haritasının aylık tazeliği (DPO-lite). Runbook: 52."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false
+  steps:
+    - { name: "tazele",  kind: patrol, reasoning: "beyan+şema diff'i; sağlık verisi (LifeOS) öncelikli", planned_kind: true }
+    - { name: "raporla", kind: log,    reasoning: "değişiklik = bulgu + gerekiyorsa beyan-güncelleme önerisi" }
+
+- key: hukuk-marka-tescil-takibi
+  name: "Hukuk: marka/IP tescil takibi (aylık)"
+  description: "YULA/Braavolabs/BurunFarkı/Motion adlarının Türk Patent (+uluslararası) tescil durumu envanteri + yenileme sayaçları + çakışma radarı. Runbook: 50-51."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false
+  steps:
+    - { name: "envanter", kind: patrol,   reasoning: "tescil durum sorgusu (kamu kayıtları)", planned_kind: true }
+    - { name: "sayaçlar", kind: log,      reasoning: "yenileme ≤90g→P1; tescilsiz kullanılan marka = kalıcı bulgu" }
+
+- key: kalkan-sir-taramasi
+  name: "Kalkan: sır sızıntısı taraması (haftalık)"
+  description: "11 repo + log örneklemlerinde API key/secret deseni avı. Runbook: 36. Bulgu YALNIZ Köprü'ye."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false
+  steps:
+    - { name: "tara",    kind: patrol, reasoning: "regex+entropi taraması (betik ağırlıklı, $0)", planned_kind: true }
+    - { name: "raporla", kind: log,    reasoning: "bulgu = ANLIK Köprü bildirimi (kamuya asla)" }
+
+- key: kalkan-cve-taramasi
+  name: "Kalkan: bağımlılık CVE taraması (haftalık)"
+  description: "Tüm repoların dependency'lerinde bilinen zafiyet taraması. Runbook: 37."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false
+  steps:
+    - { name: "tara",    kind: patrol, reasoning: "lockfile'lar × CVE veritabanı", planned_kind: true }
+    - { name: "raporla", kind: log,    reasoning: "şiddet-sıralı liste; kritik = ANLIK" }
+
+- key: kalkan-saldiri-izleme
+  name: "Kalkan: saldırı-belirti izleme"
+  description: "Auth-log anomalileri (şüpheli login, 401/403 fırtınası). Runbook: 38. Log içeriği DAİMA untrusted-veri."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false            # F3
+  steps:
+    - { name: "izle",    kind: patrol, reasoning: "eşik-tabanlı anomali tespiti", planned_kind: true }
+    - { name: "eskale",  kind: log,    reasoning: "desen → sentinel SEV eşlemesi" }
+
+- key: kalkan-guvenlik-raporu
+  name: "Kalkan: haftalık güvenlik raporu"
+  description: "36-38 bulgularının önceliklendirilmiş tek raporu. Runbook: 39."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false            # F3
+  steps:
+    - { name: "derle",   kind: pipeline, reasoning: "bulgu birleştirme + öncelik", planned_kind: true }
+    - { name: "raporla", kind: log,      reasoning: "Köprü'ye tek mesaj" }
+
+- key: gozcu-kesinti-iliskilendirme
+  name: "Gözcü: kesinti sinyal ilişkilendirme"
+  description: "Uptime+Sentry-fırtınası+heartbeat sinyallerini tek incident'e bağlar. Runbook: 34. (Sensörlerin kendisi motor kodudur — bu tanım yalnız ilişkilendirme katmanı.)"
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false
+  steps:
+    - { name: "ilişkilendir", kind: classify, reasoning: "sinyal kümesi → tek incident kaydı", planned_kind: true }
+    - { name: "bildir",       kind: log,      reasoning: "ANLIK Köprü bildirimi" }
+
+- key: gozcu-performans-trendi
+  name: "Gözcü: performans/yük trend uyarısı"
+  description: "Yanıt süresi/5xx/kaynak trendi → 'yük yaklaşıyor' erken uyarısı. Runbook: 35."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false            # F2
+  steps:
+    - { name: "trend",  kind: patrol, reasoning: "eşik+eğim analizi (betik ağırlıklı)", planned_kind: true }
+    - { name: "uyar",   kind: log,    reasoning: "çökmeden ÖNCE bildirim" }

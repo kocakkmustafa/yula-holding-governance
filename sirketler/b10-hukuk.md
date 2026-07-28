@@ -28,7 +28,7 @@ Portföy-geneli hukuki doğruluk ve hukuki araştırma katmanı. Hukuki TAVSİYE
 
 ## Workflow'ları
 
-F0 kurulumunda `workflows.yaml v2`'ye eklenecek anahtarlar (henüz koşulmadı — D4 seed'inde etkinleşir):
+`workflows.yaml` v2 anahtarları (denetim-sonrası EKLENDİ; hepsi enabled:false, D4 seed'inde yüklenir):
 - `hukuk-mevzuat-radari` — haftalık (pazartesi), tetikleyici ajan #49.
 - `hukuk-uyum-taramasi` — haftalık + olay-tetikli (yeni store listing/ToS/pazarlama metni push'u), tetikleyici ajan #50.
 - `hukuk-sozlesme-hazirlik` — olay-tetikli (radar/uyum bulgusu → taslak talebi), tetikleyici ajan #51 (F3).

@@ -1,5 +1,5 @@
 ---
-id: 18-ostinato-masasi
+id: 58-ostinato-masasi
 sirket: a8-ostinato
 faz: uykuda
 model_chain: "sınıf-1 minimum devriye: Qwen3-4B → Gemini 2.5 Flash-Lite (free) → Claude Haiku (eskalasyon); aile aktive olunca sözleşme kurucu kararıyla yeniden yazılır (sözleşme `venture-desk-motion`)"

@@ -3,7 +3,7 @@ id: a7-jablab
 kat: A
 durum: uykuda
 faz: uyanma-kosulu
-ajanlar: [17-jablab-masasi]
+ajanlar: [57-jablab-masasi]
 ---
 # A7 — JabLab (uykuda)
 

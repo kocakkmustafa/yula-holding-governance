@@ -29,14 +29,15 @@ Beş günlük/haftalık tarama hattı (§3.5 taslak tablosu) + bir haftalık sen
 
 ## Workflow'ları
 
-| Workflow key | Ajan | Kadans |
-|---|---|---|
-| `kesif-fikir-radari` | 21-fikir-radarcısı | günlük 07:00 TR |
-| `kesif-ihtiyac-madenciligi` | 22-ihtiyaç-madencisi | günlük 07:30 TR |
-| `kesif-icerik-firsati` | 23-içerik-fırsatçısı | günlük 08:00 TR |
-| `kesif-rakip-radari` | 24-rakip-radarcısı | haftalık, Pazartesi 06:00 TR |
-| `kesif-seo-firsati` | 25-SEO-fırsatçısı | haftalık, Pazartesi 06:30 TR |
-| `kesif-haftalik-rapor` | 26-sentezci | haftalık, Pazar 20:00 TR (önceki 5 hattın verisini toplar) |
+workflows.yaml'daki GERÇEK key'ler (denetim düzeltmesi — 5 hat TEK parametrik tanımda):
+| Workflow key | params.hat | Ajan | Kadans |
+|---|---|---|---|
+| `kesif-gunluk-tarama` | `fikir-radari` | 21-fikir-radarcısı | günlük 07:00 TR |
+| `kesif-gunluk-tarama` | `ihtiyac-madenciligi` | 22-ihtiyaç-madencisi | günlük 07:30 TR |
+| `kesif-gunluk-tarama` | `icerik-firsati` | 23-içerik-fırsatçısı | günlük 08:00 TR |
+| `kesif-gunluk-tarama` | `rakip-radari` | 24-rakip-radarcısı | haftalık, Pazartesi 06:00 TR |
+| `kesif-gunluk-tarama` | `seo-firsati` | 25-SEO-fırsatçısı | haftalık, Pazartesi 06:30 TR |
+| `firsat-raporu-haftalik` | — | 26-sentezci | haftalık, Pazar 20:00 TR (5 hattın verisini toplar) |
 
 ## Feedback döngüsü
 
