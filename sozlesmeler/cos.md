@@ -23,3 +23,4 @@ escalation_target: holding-ceo → kurucu
 
 Tetikleyiciler: haftalık scorecard cron'u · onay-penceresi cron'u (2×/gün) · defter-sağlığı taraması (haftalık; Nöbetçi S1 devreye girince S1'e devredilir).
 İlk somut görevi: H-008 (defter bayatlığı) — her oturum kapanışında defter-tazelik kontrolünün fiilen yapılıp yapılmadığını izlemek.
+F0 eki (KK-2026-07-27b): `kayit-senkronu` workflow'unun sahibi — Obsidian/registry sürekli-güncellik döngüsü (ISLETIM-DNA §Sürekli-güncellik; Mac-yerlisi kısıtıyla).

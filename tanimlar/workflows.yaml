@@ -1,8 +1,14 @@
-# YULA Holding — Workflow Tanımları v1 (Braavolabs'a yüklenmeye hazır)
+# YULA Holding — Workflow Tanımları v2 (2026-07-27, F0 kurulumu — HOLDING-YAPI-TASLAĞI kabulü sonrası)
 # Şekil = holding_workflow_definitions satırı (key/name/riskClass/autonomyLevel/steps).
 # steps[].kind kapalı kümedendir; "planned_kind" işaretli olanlar D4 diliminde
 # (pipeline/patrol/classify türleri) açılana dek enabled:false yüklenir.
 # Yükleme: D4'te seed betiği bu dosyayı okur → DB'ye upsert eder (key bazlı).
+# v2 farkı: mevcut 7 tanım AYNEN korundu (kapi-duman-testi enabled:true dahil);
+# YAPI-TASLAĞI §2-§5'teki şirket/ajan kadrosunun ürettiği 10 yeni tanım eklendi —
+# hepsi enabled:false + ilgili adımlar planned_kind:true (F1/F2'de motor D4'ü
+# koştuktan sonra tek tek açılacaklar). Hiçbiri işletim tavanını (R1 iç-kayıt/
+# bildirim, dış-yazma yok) aşmaz; R2/R3 işaretli olanlarda gerçek eylem HER
+# ZAMAN approval adımıyla kurucuya düşer (mevcut gunluk-brief/gp1 deseniyle aynı).
 
 - key: kapi-duman-testi
   name: "Kapı duman testi (deterministik kabul akışı)"
@@ -78,3 +84,117 @@
   steps:
     - { name: "tara",   kind: patrol, reasoning: "5 venture + holding defterlerinde yaşlanma/bayatlık taraması", planned_kind: true }
     - { name: "raporla", kind: log,   reasoning: "CoS scorecard girdisi + eskalasyon listesi" }
+
+# ── v2 eklemeleri (YAPI-TASLAĞI-2026-07-27 §2-§5) — hepsi enabled:false ────────
+
+- key: sirket-retrosu
+  name: "Şirket retrosu (parametrik — haftalık)"
+  description: "DNA kural 1+3.4: her şirket (A1-A9, B1-B10) için ayrı örnekleme — params.sirket. O haftanın kaçan-sinyal, yanlış-sınıflandırma oranı, eskalasyon isabeti, bildirim gürültü oranı (kurucunun 👍/👎/gereksiz tepkisi) ve maliyet metrikleri → Data&Learning orkestratörüne akar; bulgu runbook revizyon ÖNERİSİ üretir, küçük model kendi kuralını değiştiremez."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false            # planned_kind: patrol + pipeline (D4)
+  steps:
+    - { name: "metrik topla",       kind: patrol,   reasoning: "şirketin DEFTER'i + sentinel/brief logları üzerinden haftalık metrik çıkarımı", planned_kind: true, params: { sirket: "<parametrik: a1-lifeos | a2-burun-farki | a3-braavolabs | a4-yulalab-com | a5..a9-motion | b1-gozcu | b2-kesif | b3-medya | b6-kalkan | b10-hukuk | ...>" } }
+    - { name: "kalibrasyon örneği", kind: log,      reasoning: "kurucu 👍/👎/gereksiz tepkileri → hâkim kalibrasyon setine etiketli örnek (H-007)" }
+    - { name: "revizyon önerisi",   kind: approval, reasoning: "runbook karar-tablosu/few-shot değişiklik önerisi DAİMA kurucu onayı ister — küçük model kendi kuralını değiştiremez", params: { description: "<sirket> retrosu bir runbook revizyonu öneriyor — onaylıyor musun?" } }
+
+- key: kriz-iletisim-donuk-yayin
+  name: "Kriz iletişimi — donuk yayın kilidi"
+  description: "B3 Medya runbook'u: SEV0/kamuya-dönük kriz sinyali (veri ihlali/uzun kesinti/store krizi) algılanınca TÜM markaların (LifeOS/Burun Farkı/Braavolabs/yulalab.com/Motion 5'lisi) yayın akışı otomatik DONAR — bulaşma önleme. Tek-ses şablonları + 'hangi kanalda ne söylenir/ASLA söylenmez' kuralı hazırlanır; dondurma da çözme de kurucu onayı ister, kamuya asla oto-yanıt verilmez."
+  riskClass: R3
+  autonomyLevel: 1          # yalnız SEV0 tetikli, otonom cron YOK
+  enabled: false            # planned_kind: pipeline (D4)
+  steps:
+    - { name: "kriz sinyali algıla", kind: noop,     reasoning: "S2 değerlendirmeden gelen SEV0 + kamuya-dönük risk etiketi tetikler" }
+    - { name: "yayın dondur",        kind: approval, reasoning: "TÜM marka SM/yayın kuyruklarının donması R3 — kurucu onayı zorunlu, gecikme kabul edilebilir maliyet", params: { description: "Kriz sinyali: tüm markaların yayın akışı donduruluyor, onaylıyor musun?" } }
+    - { name: "tek-ses taslağı",     kind: pipeline, reasoning: "kriz iletişim şablonları (B3 runbook'undan) — yayın YOK, taslak", planned_kind: true, params: { pipelineKey: "yula-crisis-comms-draft" } }
+    - { name: "çözme kapısı",        kind: approval, reasoning: "dondurmanın kaldırılması da ayrı kurucu onayı ister", params: { description: "Kriz geçti — yayın akışı normale döndürülsün mü?" } }
+    - { name: "kapanış kaydı",       kind: log,      reasoning: "audit + defter (kriz süresi, etkilenen markalar, karar)" }
+
+- key: bcp-dr-game-day
+  name: "BCP/DR game-day (çeyreklik restore tatbikatı)"
+  description: "COO ajanının çeyreklik işi (kurucu ekleme, 2026-07-27): 'yedek var ≠ yedek çalışıyor' — Supabase (at-yarisi hgllgyuckwjeyykidrox / lifeos hidivnqmuhqjehmozbks), Lightsail (braavolabs backend + BF retrain cron), GitHub repoları için yedekten GERÇEK dönüş denemesi, izole ortamda. Başarı/süre/bulgu COO'ya raporlanır."
+  riskClass: R2
+  autonomyLevel: 2
+  enabled: false            # planned_kind: pipeline (D4)
+  steps:
+    - { name: "hedef seç",       kind: noop,     reasoning: "bu çeyreğin sistemi + son yedek noktası belirlenir (rotasyon: Supabase→Lightsail→GitHub)" }
+    - { name: "kurucu onayı",    kind: approval, reasoning: "izole ortamda olsa da altyapı-dokunuşlu — R2 onayı", params: { description: "Çeyreklik BCP/DR game-day: <sistem> için restore tatbikatı başlatılsın mı?" } }
+    - { name: "restore tatbikatı", kind: pipeline, reasoning: "yedekten gerçek dönüş denemesi (izole/test ortamı — prod'a dokunmaz)", planned_kind: true, params: { pipelineKey: "yula-bcp-restore-drill" } }
+    - { name: "rapor",           kind: log,      reasoning: "COO scorecard girdisi: başarı/süre/bulgu + bir sonraki çeyrek önerisi" }
+
+- key: yillik-risk-konsolidasyonu
+  name: "Yıllık Risk Konsolidasyonu (uykuda)"
+  description: "R&A orkestratörü işi: TÜM şirket DEFTER'lerinin (7 aktif/yarı-aktif + kurulu-uykuda) risk satırları → tek risk haritası + senaryo soruları. Kurucu ekleme (2026-07-27) — UYKUDA doğar, ilk koşum kurucu tetikli; cron YOK."
+  riskClass: R1
+  autonomyLevel: 1          # yalnız kurucu-tetikli — otonom değil
+  enabled: false            # planned_kind: patrol + pipeline (D4)
+  steps:
+    - { name: "tetik bekle",         kind: noop,     reasoning: "yalnız kurucu manuel tetikler — bu adım cron değil, kapı" }
+    - { name: "risk satırları topla", kind: patrol,   reasoning: "7 aktif/yarı-aktif + 5 Motion şirketinin tüm DEFTER'lerinden risk satırı çıkarımı", planned_kind: true }
+    - { name: "risk haritası derle",  kind: pipeline, reasoning: "tek konsolide risk haritası + senaryo soruları", planned_kind: true, params: { pipelineKey: "yula-annual-risk-map" } }
+    - { name: "kurucu+Fable oturumu", kind: approval, reasoning: "büyük/yapısal çıktı — DNA sürekli-güncellik kuralı: her zaman kurucu+Fable oturumu", params: { description: "Yıllık risk konsolidasyonu hazır — inceleme oturumu ayarlanabilir mi?" } }
+
+- key: kayit-senkronu
+  name: "Kayıt senkronu (Obsidian/registry tutarlılığı)"
+  description: "ENTEGRASYON-KATALOG-VE-VAULT.md §3 tetikleri: yeni venture dizini/repo tespiti · governance'a yeni KK · vault'ta '10 Holding'/'20 Şirketler' değişikliği · haftalık sabit süpürme. L1-fırsatçı (Mac açıkken) veya kurucu-oturumunda koşar; küçük senkronlar (pano satırı, registry tazeleme) OTONOM R1, yapısal olanlar (şirket açma/kapama, anayasa değişikliği) DAİMA kurucu+Fable onayı ister."
+  riskClass: R1
+  autonomyLevel: 3          # küçük senkron otonom, yapısal tespit approval-gated
+  enabled: false            # planned_kind: patrol + pipeline (D4)
+  steps:
+    - { name: "değişiklik tara",  kind: patrol,   reasoning: "vault git log + workspace + governance yeni-KK taraması (L1-fırsatçı)", planned_kind: true }
+    - { name: "registry tazele",  kind: pipeline, reasoning: "regen-registry.sh eşleniği: ventures/connections/capabilities güncelleme önerisi", planned_kind: true, params: { pipelineKey: "yula-registry-refresh" } }
+    - { name: "küçük senkron kaydı", kind: log,   reasoning: "pano-tazelik + registry küçük değişiklik — R1 otonom, onay istemez" }
+    - { name: "yapısal değişiklik bildirimi", kind: approval, reasoning: "şirket açma/kapama, sözleşme/anayasa değişikliği tespit edilirse DAİMA kurucu+Fable'a düşer", params: { description: "Kayıt senkronu yapısal bir değişiklik tespit etti — kurucu+Fable oturumu gerekli mi?" } }
+
+- key: katalog-senkronu
+  name: "Katalog senkronu (yeni danışman/skill/repo → registry önerisi)"
+  description: "ENTEGRASYON §1-2: Fable Mental (66 danışman) roster'ı + The Repo God (arsenal/the-repo-god/INDEX.md, 91 repo) + kurulu skill/MCP envanteri taranır; yeni/değişmiş kayıt bulunursa registry-ekleme ÖNERİSİ üretilir (regen-registry.sh koşumu daima kurucu-oturumunda — bu workflow yalnız TESPİT eder, yazmaz)."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false            # planned_kind: patrol (D4)
+  steps:
+    - { name: "tara",        kind: patrol, reasoning: "fable-mental/ROSTER.md + arsenal INDEX.md + kurulu skill/MCP listesi diff taraması", planned_kind: true }
+    - { name: "öneri kaydı", kind: log,    reasoning: "registry-aday satırı: kaynak+özet+önerilen kategori — regen-registry.sh kurucu-oturumunda uygular" }
+
+- key: abonelik-suprumu
+  name: "Abonelik süpürmesi (haftalık yenileme-sayacı)"
+  description: "Abonelik-bekçisi (ajan #53, CFO'ya bağlı) işi: Apple Developer ($99, T5HZGYBWK8) · GoDaddy (yulalab.com/burunfark.com/braavolabs.com domain yenilemeleri) · Google One · Lightsail (braavolabs+BF ortak instance) · Supabase (at-yarisi+lifeos) · diğer SaaS/API abonelikleri — yenileme tarihi sayaçları, fiyat-değişikliği tespiti, kullanılmayan-abonelik avı. Deadline ≤30/14/7 gün → artan SEV (L0 betik)."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false            # planned_kind: patrol (D4)
+  steps:
+    - { name: "envanter tara",  kind: patrol, reasoning: "abonelik/servis envanteri üzerinde yenileme+fiyat taraması", planned_kind: true }
+    - { name: "eşik kontrolü",  kind: noop,   reasoning: "deadline ≤30/14/7 gün → artan SEV — L0 betik, LLM'siz" }
+    - { name: "bildir",         kind: log,    reasoning: "CFO'ya haftalık envanter satırı + kullanılmayan-abonelik/fiyat-değişikliği bulgusu" }
+
+- key: kesif-gunluk-tarama
+  name: "Keşif günlük tarama (5 hat, parametrik)"
+  description: "B2 YULA Keşif işi (YAPI-TASLAĞI §3.5): params.hat ile 5 ayrı örnekleme — fikir-radari (HN API+Product Hunt API+GH Trending), ihtiyac-madenciligi (kendi+rakip store yorumları, resmî API + Reddit YALNIZ DİNLEME), icerik-firsati (Google Trends+GSC), rakip-hareketi (changelog/blog RSS+store listing diff), seo-firsati (GSC pozisyon 5-20). Resmî API/feed öncelikli — Anayasa İlke 8; scraping yalnız API/feed yoksa ve robots-uyumluysa."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false            # planned_kind: patrol (D4)
+  steps:
+    - { name: "hat taraması", kind: patrol, reasoning: "5 hattan biri (params.hat) — resmî yüzey öncelikli, ToS-uyumlu", planned_kind: true, params: { hat: "<parametrik: fikir-radari | ihtiyac-madenciligi | icerik-firsati | rakip-hareketi | seo-firsati>" } }
+    - { name: "günlük özet",  kind: log,    reasoning: "≤3 sinyal digest'e; haftalık olanlar (rakip-hareketi/seo-firsati) firsat-raporu-haftalik'e biriktirilir" }
+
+- key: gozcu-mail-dongusu
+  name: "Gözcü mail döngüsü (Gmail poll → sınıflandır → sentinel)"
+  description: "İzleme matrisi v1'in bel kemiği (§3.1): Gmail API OAuth readonly poll (kocakmkaan@gmail.com, 5-15dk) — ASC/Play mailleri, Sentry alarmları, Cloudflare/Vercel bildirimleri, Supabase pause uyarıları, GoDaddy yenileme mailleri TEK veriyoludan yakalanır. Taşıyıcı-bağımsız mail-sınıflandırıcı (sensors.ts, dalda testli) sentinel_events'e yazar; store-mail-triyaj ve sentinel-s1-devriye buradan beslenir."
+  riskClass: R1
+  autonomyLevel: 4
+  enabled: false            # planned_kind: patrol + classify (D4)
+  steps:
+    - { name: "poll",         kind: patrol,  reasoning: "Gmail API OAuth readonly poll — IMAP/app-password DEĞİL, iptal edilebilir OAuth", planned_kind: true }
+    - { name: "sınıflandır",  kind: classify, reasoning: "taşıyıcı-bağımsız mail-sınıflandırıcı: kaynak+kategori+venture ataması", planned_kind: true }
+    - { name: "sentinel yaz", kind: log,     reasoning: "sentinel_events kaydı — S1 devriyesi ve store-mail-triyaj bu kuyruktan besleniyor" }
+
+- key: firsat-raporu-haftalik
+  name: "Fırsat Raporu (haftalık)"
+  description: "Sentezci ajanı (#26, B2 Keşif) işi: 5 tarama hattının haftalık sinyalini kanıt-linkli tek rapora derler — proje fikirleri + içerik fikirleri + geliştirme önerileri. Sınıf-5; hassas/yaratıcı yorum gerekirse Fable-seans opsiyonu. Köprü Kanalı'na şablon L4 onayına kadar insan-kapılı gönderilir (gunluk-brief deseniyle aynı)."
+  riskClass: R2             # dış mesaj (Köprü Kanalı) — şablonlu R2
+  autonomyLevel: 2
+  enabled: false            # planned_kind: pipeline (D4)
+  steps:
+    - { name: "5 hattı sentezle", kind: pipeline, reasoning: "haftanın fikir-radari/ihtiyac-madenciligi/icerik-firsati/rakip-hareketi/seo-firsati sinyallerini kanıt-linkli rapora derle", planned_kind: true, params: { pipelineKey: "yula-opportunity-report" } }
+    - { name: "gönder",           kind: approval, reasoning: "şablon L4 onayına kadar insan-kapılı", params: { description: "Haftalık Fırsat Raporu hazır — Köprü Kanalı'na gönderilsin mi?" } }

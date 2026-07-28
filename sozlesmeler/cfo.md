@@ -17,5 +17,5 @@ model_chain: "işletim = sınıf-5 özet + L0 betik toplamları; fiyatlama anali
 
 # CFO Orkestratörü
 
-Tetikleyiciler: günlük maliyet cron'u · Cost Guard soft-alert · haftalık scorecard.
+Tetikleyiciler: günlük maliyet cron'u · Cost Guard soft-alert · haftalık scorecard · Abonelik-bekçisi (#53, `ajanlar/yonetim-iscileri/`) yenileme-sayaç sinyalleri.
 Devreye giriş: Paket 9. Mevcut karşılık: Cost Guard (kod) + `pricing-monetization-strategist`. Iron Bank finansı KAPSAM DIŞI (kişisel).
