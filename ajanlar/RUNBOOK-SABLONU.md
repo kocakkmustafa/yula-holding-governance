@@ -4,7 +4,7 @@ Her ajanlar/**/*.md dosyası bu yapıyı izler. Runbook = ajanın TÜM beyni; mo
 
 ```markdown
 ---
-id: <ajan-id>                    # EK-A numarası + ad, ör. 16-mail-siniflandirici
+id: <ajan-id>                    # İKİ FORMAT (v3): A-katı iştirak ajanı = "<şirket-id>-<rol-slug>" (ör. a1-lifeos-gm; dosya: istirakler/<şirket>/<rol>.md) · yönetim+B-katı = "<numara>-<slug>" (ör. 16-mail-siniflandirici). Karışım YASAK — kanonik liste: ajanlar/README.md §2
 sirket: <şirket id>
 faz: F1|F2|F3|uykuda
 model_chain: "<MODEL-ROUTING sınıf referansı, ör. sınıf-1: Qwen3-4B → Gemini-FL → Haiku>"

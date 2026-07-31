@@ -86,6 +86,8 @@ Günlük brief (≤5 madde) operasyonel nabız olarak ayrıca devam eder (C3 mad
 | **tabloda olmayan HER acil-görünümlü durum** | — | **ESKALE ET** (fail-closed) |
 
 ## Workflow'ları
+> **KANONİK KEY NOTU (denetim düzeltmesi, 2026-07-28):** Bu şirketin bugün ÇALIŞTIRILABİLİR workflow'ları `workflows.yaml`'daki PARAMETRİK tanımlardır: `istirak-raporu` · `sirket-retrosu` · `flas-not` (hepsinde `params.sirket: a3-braavolabs`). Aşağıda geçen şirket-özel key adları **PLANLI (D5)** etiketlidir — ürün-pipeline'ları kurulurken workflows.yaml'a eklenmeden çalıştırılamazlar.
+
 
 `sirket-raporu-braavolabs` (haftalık, GM sahipliği, C3) · `holding-raporu` girdisi · `sentinel-s1-devriye` (venture=braavolabs filtresi) · `store-mail-triyaj` (RET hard-sinyal) · `kapi-duman-testi` (onay-park/resume zincirinin uçtan uca kanıtı — bu platformda dogfood edilir) · `gunluk-brief` · `haftalik-scorecard` · `defter-sagligi` · **planlı (D5'te seed'lenir, enabled:false):** `rakip-taramasi-braavolabs` · `pazar-taramasi-braavolabs` · `guvenlik-taramasi-braavolabs` (Kalkan altyapısını kendi kapsamına uygular) · `hukuk-uyum-taramasi-braavolabs` · `icerik-taslak-braavolabs`.
 

@@ -65,6 +65,8 @@ Uykuda modda ŞİRKET RAPORU **kısa** biçimde devam eder (rapor kadansı TABAN
 Uyanma koşulu: kurucu tetiği (vault başlangıç promptu) + Choreia'nın V1'inin store submission'a hazır hale gelmesi (G-kapıları serisinin tamamlanması — özellikle **G4 skor-kalibrasyon kapısı**, K8 aile kuralı gereği zorunlu). Not: C-001/TAM PLAN kapısı zaten geçildi — bu artık uyanma şartı DEĞİL. Kontrol listesi: (1) DEFTER'de açık P0 yok · (2) motion-core pin sürümü güncel · (3) ASC/Play kaydı hâlâ prepare-for-submission (ya da submit aşamasına resmî geçti) · (4) marka radarında açık çakışma yok · (5) 12 rolün TAMAMI runbook'u tam-göreve (C2 sözleşmesine) geçti · (6) CTO mimari kapısından geçti (G4 kalibrasyon kapısı dahil) · (7) motion-core'a doğrudan-yazma ihlali kaydı yok (M-F-03 sınırı temiz) · (8) Veri Gizliliği Sorumlusu C-024 provenance envanterini kapattı.
 
 ## Workflow'ları
+> **KANONİK KEY NOTU (denetim düzeltmesi, 2026-07-28):** Bu şirketin bugün ÇALIŞTIRILABİLİR workflow'ları `workflows.yaml`'daki PARAMETRİK tanımlardır: `istirak-raporu` · `sirket-retrosu` · `flas-not` (hepsinde `params.sirket: a9-choreia`). Aşağıda geçen şirket-özel key adları **PLANLI (D5)** etiketlidir — ürün-pipeline'ları kurulurken workflows.yaml'a eklenmeden çalıştırılamazlar.
+
 Beklenen key'ler (workflows.yaml v3'e eklenecek, henüz kayıtlı değil): `a9-choreia-sirket-raporu` (haftalık, parametrik C6) · `a9-choreia-rezervasyon-sagligi` (haftalık) · `a9-choreia-marka-radari` (haftalık) · `a9-choreia-motion-core-sinir-alarmi` (olay-tetikli, sürekli devriye — M-F-03 bekçisi) · `a9-choreia-rakip-pazar-taramasi` (haftalık, ön-istihbarat).
 
 ## Feedback döngüsü

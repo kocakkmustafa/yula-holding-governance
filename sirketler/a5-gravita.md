@@ -74,6 +74,8 @@ Uyanma koşulu (yazılı hâliyle, v2'den değişmedi): kurucu tetiği (vault ba
 Kontrol listesi (kadroyu FİİLEN uyandırmadan önce): (1) DEFTER'de açık P0 yok · (2) motion-core pin sürümü güncel (bugün `0.9.0`, G-101) · (3) ASC/Play kaydı hâlâ prepare-for-submission · (4) marka radarında açık çakışma yok · (5) 12 rolün TAMAMI runbook'u ile tam-göreve alındı (yalnız İzleme&Doğruluk + Kod&Test değil) · (6) CTO mimari kapısından geçti · (7) `ops/social-media/config/brands.yml`'e Gravita marka girdisi (ton/dil/kadans/hesap) eklendi · (8) ilk ŞİRKET RAPORU tam-C3 formatında derlendi.
 
 ## Workflow'ları
+> **KANONİK KEY NOTU (denetim düzeltmesi, 2026-07-28):** Bu şirketin bugün ÇALIŞTIRILABİLİR workflow'ları `workflows.yaml`'daki PARAMETRİK tanımlardır: `istirak-raporu` · `sirket-retrosu` · `flas-not` (hepsinde `params.sirket: a5-gravita`). Aşağıda geçen şirket-özel key adları **PLANLI (D5)** etiketlidir — ürün-pipeline'ları kurulurken workflows.yaml'a eklenmeden çalıştırılamazlar.
+
 Beklenen key'ler (workflows.yaml v3'e C6 planına göre eklenecek, henüz kayıtlı değil): `gravita-rezervasyon-sagligi` (haftalık) · `gravita-marka-radari` (haftalık) · `gravita-kilit-ihlal-alarmi` (olay-tetikli, sürekli devriye, yalnız otomasyon-kaynaklı yazar-kimliği) · `sirket-raporu` (parametrik, `venture=gravita`, haftalık — GM tetikler) · uyanıştan sonra devreye girecek: `gravita-musteri-sesi-triyaj`, `gravita-rakip-taramasi`, `gravita-pazar-taramasi`, `gravita-icerik-taslak`.
 
 ## Feedback döngüsü

@@ -82,6 +82,8 @@ Aşağıdakilerden HERHANGİ biri gerçekleştiğinde rapor döngüsü beklenmez
 | **Tabloda olmayan HER ciddi/belirsiz durum** | — | **ESKALE ET** (fail-closed, DNA kural 6) |
 
 ## Workflow'ları
+> **KANONİK KEY NOTU (denetim düzeltmesi, 2026-07-28):** Bu şirketin bugün ÇALIŞTIRILABİLİR workflow'ları `workflows.yaml`'daki PARAMETRİK tanımlardır: `istirak-raporu` · `sirket-retrosu` · `flas-not` (hepsinde `params.sirket: a4-yulalab-com`). Aşağıda geçen şirket-özel key adları **PLANLI (D5)** etiketlidir — ürün-pipeline'ları kurulurken workflows.yaml'a eklenmeden çalıştırılamazlar.
+
 
 `sentinel-s1-devriye` (venture=yulalab-com filtresi) · `sirket-raporu` (haftalık, GM derler — parametrik workflow, C6) · `gunluk-brief` · `haftalik-scorecard` · `defter-sagligi` (BAYAT durum satırı taraması, H-008 — bu şirkette cross-claim tazeliğiyle doğrudan örtüşür) · GM talep-tetikli ad-hoc koşular (C7-3, audit'e yazılır).
 

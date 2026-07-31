@@ -51,7 +51,7 @@ Portföyün TÜM sağlık sinyallerini (store kararları, kesinti, hata fırtın
 - `store-mail-triyaj` (workflows.yaml) — 16 Mail-sınıflandırıcı; ret = hard sinyal, devriye beklemez; venture belirlenebiliyorsa ANINDA Köprü + ilgili GM eş-zamanlı bilgi (C7-2), belirlenemiyorsa Gözcü S2'ye düşer.
 - `gunluk-brief` / `haftalik-scorecard` (workflows.yaml, CEO/CoS sahipliğinde) — Gözcü artık yalnız holding-geneli satır besler; şirket-satırlarını GM'ler kendi ŞİRKET RAPORU'ndan taşır.
 - `defter-sagligi` (workflows.yaml, CoS sahipliğinde) — Gözcü'nün kendi DEFTER'i de bu haftalık süpürmeye girer.
-- **F0 sonrası açılacak, henüz workflows.yaml'da key'i yok** (dürüst not): `kesinti-korelasyonu` (34), `performans-trend-uyarisi` (35), `drift-denetimi` (19), `yayin-kapisi` (20).
+- **F0 sonrası açılacak, henüz workflows.yaml'da key'i yok** (dürüst not): `gozcu-kesinti-iliskilendirme` (34), `gozcu-performans-trendi` (35), `drift-denetimi` (PLANLI — workflows.yaml'da henüz yok) (19), `yayin-kapisi` (PLANLI — workflows.yaml'da henüz yok) (20).
 
 ## Feedback döngüsü
 

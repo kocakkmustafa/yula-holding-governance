@@ -61,6 +61,8 @@ Kod kilidi açılana dek tamamı **uykuda görevleri** modunda çalışır (R0 t
 | **tabloda olmayan HER durum** | ESKALE ET (asla tahmin etme) | — |
 
 ## Workflow'ları
+> **KANONİK KEY NOTU (denetim düzeltmesi, 2026-07-28):** Bu şirketin bugün ÇALIŞTIRILABİLİR workflow'ları `workflows.yaml`'daki PARAMETRİK tanımlardır: `istirak-raporu` · `sirket-retrosu` · `flas-not` (hepsinde `params.sirket: a7-jablab`). Aşağıda geçen şirket-özel key adları **PLANLI (D5)** etiketlidir — ürün-pipeline'ları kurulurken workflows.yaml'a eklenmeden çalıştırılamazlar.
+
 Beklenen key'ler (workflows.yaml v3'e eklenecek, henüz kayıtlı değil — C6 madde 2): `jablab-sirket-raporu` (aylık, uykuda modda) · `jablab-rezervasyon-sagligi` (haftalık) · `jablab-marka-radari` (haftalık) · `jablab-kilit-ihlal-alarmi` (olay-tetikli, sürekli devriye) · `jablab-gizlilik-on-envanteri` (tek-seferlik + çeyreklik tazeleme).
 
 ## Feedback döngüsü

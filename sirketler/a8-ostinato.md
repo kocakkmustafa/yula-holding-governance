@@ -64,6 +64,8 @@ Uykuda modda ŞİRKET RAPORU **kısa** biçimde devam eder (rapor kadansı TABAN
 Uyanma koşulu: kurucu tetiği (vault başlangıç promptu) + D3 veri-protokolü kapanışı (kamu-video hasat turu ≥2 bağımsız kaynak/hata-kodu şartı tamam) + W1 platform/ses-çekirdeği teslimi. Kontrol listesi: (1) DEFTER'de açık P0 yok · (2) motion-core pin sürümü (motion_core-v0.1.0+) güncel · (3) ASC/Play kaydı hâlâ prepare-for-submission · (4) marka radarında açık çakışma yok · (5) 12 rolün TAMAMI runbook'u tam-göreve (C2 sözleşmesine) geçti · (6) CTO mimari kapısından geçti (D3 protokol + W3 kapı kararı dahil) · (7) Veri Gizliliği Sorumlusu çocuk-verisi envanterini kapattı.
 
 ## Workflow'ları
+> **KANONİK KEY NOTU (denetim düzeltmesi, 2026-07-28):** Bu şirketin bugün ÇALIŞTIRILABİLİR workflow'ları `workflows.yaml`'daki PARAMETRİK tanımlardır: `istirak-raporu` · `sirket-retrosu` · `flas-not` (hepsinde `params.sirket: a8-ostinato`). Aşağıda geçen şirket-özel key adları **PLANLI (D5)** etiketlidir — ürün-pipeline'ları kurulurken workflows.yaml'a eklenmeden çalıştırılamazlar.
+
 Beklenen key'ler (workflows.yaml v3'e eklenecek, henüz kayıtlı değil): `a8-ostinato-sirket-raporu` (haftalık, parametrik C6) · `a8-ostinato-rezervasyon-sagligi` (haftalık) · `a8-ostinato-marka-radari` (haftalık) · `a8-ostinato-kilit-ihlal-alarmi` (olay-tetikli, sürekli devriye) · `a8-ostinato-rakip-pazar-taramasi` (haftalık, ön-istihbarat).
 
 ## Feedback döngüsü

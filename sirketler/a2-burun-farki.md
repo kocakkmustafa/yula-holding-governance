@@ -72,6 +72,8 @@ GM her hafta (Pazartesi) 11 ajanının kanıt-linkli çıktısını tek dosyada 
 | **Tabloda olmayan HER SEV0/SEV1 desen** | **ESKALE ET** — asla "rapora bırak" deme |
 
 ## Workflow'ları
+> **KANONİK KEY NOTU (denetim düzeltmesi, 2026-07-28):** Bu şirketin bugün ÇALIŞTIRILABİLİR workflow'ları `workflows.yaml`'daki PARAMETRİK tanımlardır: `istirak-raporu` · `sirket-retrosu` · `flas-not` (hepsinde `params.sirket: a2-burun-farki`). Aşağıda geçen şirket-özel key adları **PLANLI (D5)** etiketlidir — ürün-pipeline'ları kurulurken workflows.yaml'a eklenmeden çalıştırılamazlar.
+
 
 Mevcut (workflows.yaml v2): `sentinel-s1-devriye` (venture=burun-farki filtresi) · `store-mail-triyaj` (RET hard-sinyal) · `gunluk-brief` (⏰deadline + dürüstlük satırı ZORUNLU) · `haftalik-scorecard` · `defter-sagligi` · `sirket-retrosu` (params.sirket=a2-burun-farki). C6 planında eklenecek (henüz motora yüklenmedi): parametrik `sirket-raporu` (haftalık, GM derler, C3 formatı) — bu governance tanımı o üretimin temelidir.
 

@@ -67,6 +67,8 @@ GM (`a6-lissom-gm`) haftalık **ŞİRKET RAPORU**'nu derler. Uykuda modda rapor 
 Uyanma koşulu: kurucu tetiği (vault başlangıç promptu — aile içinde ÖNCE Lissom önerisi). Kontrol listesi: (1) DEFTER'de açık P0 yok · (2) motion-core pin sürümü güncel · (3) ASC/Play kaydı hâlâ prepare-for-submission · (4) marka radarında açık çakışma yok · (5) 12 rolün TAMAMI runbook'u ile tam-göreve alındı (yalnız İzleme&Doğruluk + Kod&Test değil) · (6) CTO mimari kapısından geçti · (7) `ops/social-media/config/brands.yml`'e Lissom marka girdisi (ton/dil/kadans/hesap) eklendi · (8) ilk ŞİRKET RAPORU tam-C3 formatında derlendi.
 
 ## Workflow'ları
+> **KANONİK KEY NOTU (denetim düzeltmesi, 2026-07-28):** Bu şirketin bugün ÇALIŞTIRILABİLİR workflow'ları `workflows.yaml`'daki PARAMETRİK tanımlardır: `istirak-raporu` · `sirket-retrosu` · `flas-not` (hepsinde `params.sirket: a6-lissom`). Aşağıda geçen şirket-özel key adları **PLANLI (D5)** etiketlidir — ürün-pipeline'ları kurulurken workflows.yaml'a eklenmeden çalıştırılamazlar.
+
 Beklenen key'ler (workflows.yaml v3'e C6 planına göre eklenecek, henüz kayıtlı değil): `lissom-rezervasyon-sagligi` (haftalık) · `lissom-marka-radari` (haftalık) · `lissom-kilit-ihlal-alarmi` (olay-tetikli, sürekli devriye) · `sirket-raporu` (parametrik, `venture=lissom`, haftalık — GM tetikler) · uyanıştan sonra devreye girecek: `lissom-musteri-sesi-triyaj`, `lissom-rakip-taramasi`, `lissom-pazar-taramasi`, `lissom-icerik-taslak`.
 
 ## Feedback döngüsü

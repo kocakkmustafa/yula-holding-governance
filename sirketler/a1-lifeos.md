@@ -82,6 +82,8 @@ Bu rapor HOLDİNG RAPORU'nun (yönetim katmanı, ayrı) üzerine yazılmaz — i
 | **tabloda olmayan HER durum** | — | **ESKALE ET** (asla tahmin etme, sessiz geçme) |
 
 ## Workflow'ları
+> **KANONİK KEY NOTU (denetim düzeltmesi, 2026-07-28):** Bu şirketin bugün ÇALIŞTIRILABİLİR workflow'ları `workflows.yaml`'daki PARAMETRİK tanımlardır: `istirak-raporu` · `sirket-retrosu` · `flas-not` (hepsinde `params.sirket: a1-lifeos`). Aşağıda geçen şirket-özel key adları **PLANLI (D5)** etiketlidir — ürün-pipeline'ları kurulurken workflows.yaml'a eklenmeden çalıştırılamazlar.
+
 
 `sirket-raporu-lifeos` (haftalık, GM derler) · `sentinel-s1-devriye` (3 saatte bir, venture=lifeos filtresi) · `store-mail-triyaj` (ASC/Play maili; RET hard-sinyal) · `musteri-sesi-analizi-lifeos` (haftalık + olay-tetikli yorum patlaması) · `rakip-pazar-taramasi-lifeos` (haftalık) · `pazarlama-metrik-lifeos` (haftalık) · `guvenlik-taramasi-lifeos` (haftalık, Kalkan aracı) · `veri-gizliligi-envanteri-lifeos` (haftalık) · `hukuk-uyum-lifeos` (haftalık) · `sosyal-medya-takip-lifeos` (haftalık) · `icerik-taslak-lifeos` (olay-tetikli) · `kod-test-sagligi-lifeos` (haftalık/CI-tetikli, MONITOR-ONLY) · `gunluk-brief` (kadro satırı ≤1 madde) · `haftalik-scorecard` (KPI girdisi) · `defter-sagligi` (haftalık — bayat/sahipsiz satır taraması, H-008).
 
