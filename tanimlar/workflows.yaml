@@ -1,4 +1,4 @@
-# YULA Holding — Workflow Tanımları v2 (2026-07-27, F0 kurulumu — HOLDING-YAPI-TASLAĞI kabulü sonrası)
+# YULA Holding — Workflow Tanımları v3 (2026-07-31, EK-C tam-kadrolu iştirak modeli — HOLDING-YAPI-TASLAĞI v3 REVİZYONU/KK-2026-07-28 sonrası)
 # Şekil = holding_workflow_definitions satırı (key/name/riskClass/autonomyLevel/steps).
 # steps[].kind kapalı kümedendir; "planned_kind" işaretli olanlar D4 diliminde
 # (pipeline/patrol/classify türleri) açılana dek enabled:false yüklenir.
@@ -9,6 +9,21 @@
 # koştuktan sonra tek tek açılacaklar). Hiçbiri işletim tavanını (R1 iç-kayıt/
 # bildirim, dış-yazma yok) aşmaz; R2/R3 işaretli olanlarda gerçek eylem HER
 # ZAMAN approval adımıyla kurucuya düşer (mevcut gunluk-brief/gp1 deseniyle aynı).
+# v3 farkı (EK-C — 9 iştirak × 12 standart kadro modeli): mevcut 28 tanım AYNEN
+# korundu; TEK içerik değişikliği sirket-retrosu'nun params.sirket örnek
+# listesidir — "a5..a9-motion" kısaltması v3 iştirak id'leriyle (a5-gravita ...
+# a9-choreia) ve tam B-katı listesiyle (b1..b10) açıldı. Sona 3 yeni v3 tanımı
+# eklendi (hepsi enabled:false, D5'te YULA tenant'ında pipeline karşılıkları
+# kurulana dek yüklenmez):
+#   - istirak-raporu: şirket-başına (params.sirket=a1..a9) haftalık ŞİRKET
+#     RAPORU — GM 11 kadro ajanının çıktısını derler, DOĞRUDAN kurucuya gider.
+#   - holding-raporu: 9 şirket raporunu yönetim katı işler (CEO sentez + R&A
+#     denetim + CFO maliyet + D&L çapraz-desen) → kurucuya AYRI rapor (C3 —
+#     şirket raporunun üzerine yazılmaz, iki rapor ayrık kalır).
+#   - flas-not: GM'in talep-tetikli takvim-dışı ara-raporu; severity sinyalinin
+#     YERİNE geçmez — C7-2 bağlayıcı kuralı ("Hiçbir severity sinyali rapor
+#     bekletilerek geciktirilemez.") sorumlu ajanın DOĞRUDAN Köprü'ye gitmesini
+#     zaten güvenceye alıyor, bu workflow yalnız GM'in bilinçli ek-rapor kanalı.
 
 - key: kapi-duman-testi
   name: "Kapı duman testi (deterministik kabul akışı)"
@@ -94,7 +109,7 @@
   autonomyLevel: 4
   enabled: false            # planned_kind: patrol + pipeline (D4)
   steps:
-    - { name: "metrik topla",       kind: patrol,   reasoning: "şirketin DEFTER'i + sentinel/brief logları üzerinden haftalık metrik çıkarımı", planned_kind: true, params: { sirket: "<parametrik: a1-lifeos | a2-burun-farki | a3-braavolabs | a4-yulalab-com | a5..a9-motion | b1-gozcu | b2-kesif | b3-medya | b6-kalkan | b10-hukuk | ...>" } }
+    - { name: "metrik topla",       kind: patrol,   reasoning: "şirketin DEFTER'i + sentinel/brief logları üzerinden haftalık metrik çıkarımı", planned_kind: true, params: { sirket: "<parametrik (v3 iştirak id'leri): a1-lifeos | a2-burun-farki | a3-braavolabs | a4-yulalab-com | a5-gravita | a6-lissom | a7-jablab | a8-ostinato | a9-choreia | b1-gozcu | b2-kesif | b3-medya | b4-atolye | b5-lab | b6-kalkan | b7-arge | b8-oyun | b9-reklam | b10-hukuk>" } }
     - { name: "kalibrasyon örneği", kind: log,      reasoning: "kurucu 👍/👎/gereksiz tepkileri → hâkim kalibrasyon setine etiketli örnek (H-007)" }
     - { name: "revizyon önerisi",   kind: approval, reasoning: "runbook karar-tablosu/few-shot değişiklik önerisi DAİMA kurucu onayı ister — küçük model kendi kuralını değiştiremez", params: { description: "<sirket> retrosu bir runbook revizyonu öneriyor — onaylıyor musun?" } }
 
@@ -311,3 +326,44 @@
   steps:
     - { name: "trend",  kind: patrol, reasoning: "eşik+eğim analizi (betik ağırlıklı)", planned_kind: true }
     - { name: "uyar",   kind: log,    reasoning: "çökmeden ÖNCE bildirim" }
+
+# ── v3 eklemeleri (EK-C — tam-kadrolu iştirak modeli, KK-2026-07-28) ───────────
+# 9 iştirakin (A1-A9) her biri standart 12 kişilik kadroyla (C2) kendi verisini
+# işler; GM (rol 1) haftalık ŞİRKET RAPORU'nu derler. Yönetim katı 9 raporu
+# İŞLEYİP ayrı bir HOLDİNG RAPORU üretir (C3) — iki rapor asla birleştirilmez.
+# Acil/severity sinyalleri bu iki rapor döngüsünden TAMAMEN bağımsızdır: ilgili
+# ajandan DOĞRUDAN Köprü'ye gider (C7-2, GM'i bile beklemez); flas-not GM'in
+# BUNUN DIŞINDA kendi kararıyla ürettiği takvim-dışı ara-rapordur.
+
+- key: istirak-raporu
+  name: "İştirak raporu (parametrik — haftalık ŞİRKET RAPORU)"
+  description: "EK-C C2/C3 madde 1: her ürün şirketi (A1-A9) için ayrı örnekleme — params.sirket. GM (rol 1), kendi 11 kadro ajanının (Müşteri-Sesi, İzleme&Doğruluk, Rakip, Pazar, Pazarlama, Güvenlik, Veri Gizliliği, Hukuk-Uyum, Sosyal-Medya, İçerik, Kod&Test) haftalık çıktısını kanıt-linkli tek ŞİRKET RAPORU'na derler; rapor DOĞRUDAN kurucuya gider (Köprü + şirketin DEFTER'i). Holding raporunun girdisidir ama üzerine yazılmaz — iki rapor ayrık kalır (C3)."
+  riskClass: R2             # dış mesaj (kurucuya doğrudan gönderim) — şablonlu R2
+  autonomyLevel: 2          # şablon L4 onayına kadar her gönderim onaylı
+  enabled: false            # planned_kind: pipeline + patrol (D5 — YULA tenant'ında şirket-başına kurulur)
+  steps:
+    - { name: "kadro çıktılarını derle", kind: pipeline, reasoning: "11 ajanın haftalık ozet+kanit_link çıktısını şirketin pipeline'ında topla (C2 kadro tablosu)", planned_kind: true, params: { sirket: "<parametrik: a1-lifeos | a2-burun-farki | a3-braavolabs | a4-yulalab-com | a5-gravita | a6-lissom | a7-jablab | a8-ostinato | a9-choreia>" } }
+    - { name: "GM sentezi",              kind: patrol,   reasoning: "GM 7 zorunlu bölümü (sağlık/doğruluk · müşteri sesi · rakip/pazar · pazarlama · güvenlik/gizlilik/hukuk · içerik performansı · kod&test) kanıt-linkli tek rapora bağlar; bir ajan zaten acil sinyal yollamışsa raporu BEKLEMEZ (C7-2), eş-zamanlı bilgilenir", planned_kind: true }
+    - { name: "kurucuya gönderim",       kind: approval, reasoning: "şablon L4 onayına kadar insan-kapılı; şirket raporu holding raporunun ÜZERİNE yazılmaz, ayrı gider (C3)", params: { description: "<sirket> ŞİRKET RAPORU hazır — kurucuya gönderilsin mi?" } }
+
+- key: holding-raporu
+  name: "Holding raporu (haftalık — 9 şirket raporunun yönetim-katı sentezi)"
+  description: "EK-C C3 madde 2: 9 şirketin (A1-A9) o haftaki istirak-raporu çıktıları yönetim katı tarafından İŞLENİR — CEO sentezi + R&A'nın bağımsız denetim notları (bir şirketin iddiası doğrulanamadıysa bunu İÇERİR) + CFO maliyet/P&L özeti + Data&Learning'in şirketler-arası çapraz-desenleri + portföy öncelik önerileri. Şirket raporlarının yerine geçmez, üzerine de yazılmaz — kurucuya AYRI bir rapor olarak, ayrı gönderilir (denetlenebilirlik, C3)."
+  riskClass: R2             # dış mesaj (kurucuya doğrudan gönderim) — şablonlu R2
+  autonomyLevel: 2
+  enabled: false            # planned_kind: patrol + pipeline (D5 — 9 şirketin istirak-raporu'ndan SONRA koşar)
+  steps:
+    - { name: "9 şirket raporunu topla", kind: patrol,   reasoning: "haftanın 9 istirak-raporu çıktısını (A1-A9) tek girdi kümesine indir — henüz yorum eklenmez", planned_kind: true }
+    - { name: "yönetim-katı sentezi",    kind: pipeline, reasoning: "CEO sentez + R&A bağımsız denetim notu + CFO maliyet/P&L + D&L çapraz-desen — dört ayrı orkestratör girdisi tek pipeline'da birleşir", planned_kind: true, params: { pipelineKey: "yula-holding-report" } }
+    - { name: "kurucuya AYRI gönderim",  kind: approval, reasoning: "şablon L4 onayına kadar insan-kapılı; şirket raporlarıyla AYNI mesajda BİRLEŞTİRİLMEZ (C3)", params: { description: "Haftalık Holding Raporu hazır — kurucuya AYRI rapor olarak gönderilsin mi?" } }
+
+- key: flas-not
+  name: "Flaş Not (talep-tetikli — GM ara-raporu)"
+  description: "EK-C C7 madde 2/3: GM, haftalık ŞİRKET RAPORU döngüsünü beklemeden takvim-dışı bir ara-rapor üretebilir (kurucu talebiyle veya GM'in kendi şirketinde önemli gördüğü bir gelişmede — ör. viral an, momentum fırsatı). Severity sinyaliyle KARIŞTIRILMAZ: SEV0-1/şirket-tanımlı acil eşikler zaten sorumlu ajandan DOĞRUDAN Köprü Kanalı'na gider ve GM'i beklemez — bağlayıcı kural (C7-2, aynen): 'Hiçbir severity sinyali rapor bekletilerek geciktirilemez.' Flaş Not, GM'in BİLİNÇLİ ara-rapor kararının taşıyıcısıdır; severity yolunun yerine geçmez."
+  riskClass: R2             # dış mesaj (kurucuya doğrudan gönderim) — şablonlu R2
+  autonomyLevel: 2
+  enabled: false            # planned_kind: pipeline (D5 — GM runbook'una bağlı, şirket-parametrik)
+  steps:
+    - { name: "tetik",             kind: noop,     reasoning: "kurucu talebi VEYA GM'in C7-3 sınırları içindeki kendi kararı — cron YOK, yalnız olay/talep" }
+    - { name: "ara-rapor taslağı", kind: pipeline, reasoning: "GM sınıf-5 derlemesiyle kısa, kanıt-linkli ara-rapor (haftalık ŞİRKET RAPORU formatını KOPYALAMAZ — konu-odaklı)", planned_kind: true, params: { sirket: "<parametrik: a1-lifeos | a2-burun-farki | a3-braavolabs | a4-yulalab-com | a5-gravita | a6-lissom | a7-jablab | a8-ostinato | a9-choreia>" } }
+    - { name: "kurucuya gönderim", kind: approval, reasoning: "şablon L4 onayına kadar insan-kapılı; severity sinyalinin YERİNE geçmez — bu yalnız GM'in ek/ara-rapor kanalı", params: { description: "<sirket> GM'inden Flaş Not — kurucuya gönderilsin mi?" } }
