@@ -1,5 +1,10 @@
 # ENTEGRASYON — Fable Mental · The Repo God · Obsidian (KK-2026-07-27b)
 
+> ⚠️ **BÖLÜM 1 ve 2 GEÇERSİZ — KALDIRILDI (2026-08-07, kurucu kararı).**
+> Fable Mental danışman havuzu ve The Repo God repo sandığı tamamen silindi; `.claude/agents/` de kaldırıldı.
+> Claude artık yönlendirilmeden kendi bilgisiyle çalışıyor. Aşağıdaki 1. ve 2. bölümler **tarihsel kayıttır**,
+> uygulanmaz. **3. bölüm (Obsidian vault köprüsü) AYNEN GEÇERLİDİR.**
+
 ## 1. Fable Mental (66 danışman) — "uzman havuzu" köprüsü
 
 **Ne:** 66 danışman × 3 dosya (`fable-mental/` — agents+reference+prompts); canlı sayı `holding/registry/capabilities.yaml`. Bunlar KADRO değil, çağrı-havuzudur.

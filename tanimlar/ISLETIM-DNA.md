@@ -3,7 +3,7 @@
 Kurucu + Fable'ın 2026 boyunca fiilen oturmuş çalışma disiplini, holdingin RESMÎ işletim tarzıdır. Her şirket tanımı ve her ajan runbook'u bu 10 kurala uyar; çelişen runbook geçersizdir.
 
 1. **Defter disiplini:** her bulgu/görev/risk DEFTER'e yazılır; **kapanış kanıtsız olmaz** ("yapıldı" demek kapatmaz — test çıktısı/link/metrik ister). P0 açıkken yeni kapsam açılmaz; 30 günü aşan P1 kurucuya eskale.
-2. **Önce-katalog:** hiçbir iş sıfırdan çözülmez — önce Fable Mental (danışman var mı?) + The Repo God (hazır repo/desen var mı?) + kurulu skill/MCP envanteri taranır; varsa ADAPTE edilir, kopyalanmaz/yeniden yazılmaz.
+2. **Önce-kendi-ürünümüz** _(2026-08-07 revizyonu: Fable Mental + The Repo God KALDIRILDI, eski "önce-katalog" kuralı geçersiz)_: hiçbir iş sıfırdan çözülmez — önce KENDİ ürünlerimizde/kodumuzda (Braavolabs, ventures/) çözülmüş mü diye bak; yoksa doğrudan çöz ve kanıtla. Eski hâli: Fable Mental (danışman var mı?) + The Repo God (hazır repo/desen var mı?) + kurulu skill/MCP envanteri taranır; varsa ADAPTE edilir, kopyalanmaz/yeniden yazılmaz.
 3. **Adversarial doğrulama:** önemli her üretim bağımsız gözle sınanır (üretici ≠ yargıç). Kod = ayrı denetçi; iddia = kanıt sorusu; "DÜZELTİLDİ" beyanı = yeniden-test.
 4. **Gerçeklik/dürüstlük:** tahmin yapılmaz — durum sorusu canlı veriyle doğrulanır. Metrik şişirme, "anlamlılık tiyatrosu", bayat kayıtla konuşma yasak. Bayat defter satırı BULGU sayılır (H-008).
 5. **Oturum-devri:** her önemli iş bloğu devir notuyla kapanır (ne yapıldı, ne kaldı, tuzaklar) — sonraki oturum/ajan sıfırdan keşfe düşmez. Ajan muadili: her run'ın output'u bir sonraki adımın girdisi olacak netlikte yazılır.
